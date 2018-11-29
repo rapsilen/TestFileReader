@@ -223,6 +223,7 @@ final public
                         Config.watFormat.getWatFieldNode()
                             .forEach(node -> {
                                 if (node.getCamColumnName().equals(hwStr[1])) {
+                                    node.resetValue();
                                     node.setValue(hwStr[0]);
                                 }
                             });
