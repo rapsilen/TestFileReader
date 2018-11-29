@@ -139,7 +139,8 @@ PUT _template/all-test
       "wafer-sort-test-*",
       "slt-test-*",
       "ft-test-*",
-      "smap-test-*"
+      "smap-test-*",
+      "wat-test-*"
     ],
     "settings": {
       "index": {
@@ -692,6 +693,38 @@ PUT _template/all-test
             }
           }
          },
+         {
+          "key_word_59": {
+            "match": "TestNumber",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+         },
+        {
+          "key_word_60": {
+            "match": "TestName",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+         },
+         {
+          "key_word_61": {
+            "match": "Group",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+         },
+         {
+          "key_word_62": {
+            "match": "Group",
+            "mapping": {
+              "type": "keyword"
+            }
+          }
+         },
 
           {
             "text_1": {
@@ -1168,6 +1201,38 @@ PUT _ingest/pipeline/Camstar-report
       }
     }
   ]
+}
+PUT _ingest/pipeline/wat-test
+{
+ "description": "to parse the filebeat message",
+    "processors": [
+      {
+        "kv": {
+          "field": "message",
+          "field_split": ",",
+          "value_split": "="
+        }
+      },
+      {
+        "remove": {
+          "field": [
+            "message",
+            "source",
+            "offset",
+            "prospector",
+            "beat"
+          ]
+        }
+      },
+      {
+        "date_index_name": {
+          "field": "FileTime",
+          "index_name_prefix": "wat-test-",
+          "date_rounding": "y"
+        }
+      }
+    ]
+  
 }
 
 PUT _template/cam-data

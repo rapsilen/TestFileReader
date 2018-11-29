@@ -64,6 +64,8 @@ public
     public final static
         String Unit = "Unit";
     public final static
+        String Units = "Units";
+    public final static
         String SoftBinDesc = "SBinDesc";
     public final static
         String HardBinDesc = "HBinDesc";
@@ -155,5 +157,19 @@ public
         String CamDate = "camDate";
     public static
         String CamMonth = "camMonth";
-
+    // for wat data
+    public static
+        String TestNumber = "TestNumber";
+    public static
+        String TestName = "TestName";
+    public static
+        String HiLimit = "highSpecLimit";
+    public static
+        String LoLimit = "lowSpecLimit";
+    public static
+        String TestValue = "value";
+    public static
+        String SlaveDie = "SalveDie";
+    public static
+        String Group = "Group";
 }

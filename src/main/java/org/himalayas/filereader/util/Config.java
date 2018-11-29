@@ -407,6 +407,7 @@ public
             int index = -1;
             boolean isLotNumber = false;
             boolean isOperation = false;
+            boolean isWaferNumber = false;
 
             for (Element node : nodes) {
                 String nodeName = node.getName().trim().toLowerCase();
@@ -421,6 +422,9 @@ public
                         break;
                     case "operation":
                         isOperation = value.equals("1");
+                        break;
+                    case "iswafernumber":
+                        isWaferNumber = value.equals("1");
                         break;
                     case "time":
                         isTime = value.equals("1");
@@ -580,6 +584,9 @@ public
                     }
                     if (isTime && dataFormat.getDataType().equals(Config.DataTypes.CAMSTAR)) {
                         dataFormat.setCamDateNode(xmlNode);
+                    }
+                    if (isWaferNumber) {
+                        dataFormat.setWaferNumebrNode(xmlNode);
                     }
                 }
                 else {

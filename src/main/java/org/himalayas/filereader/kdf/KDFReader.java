@@ -107,8 +107,6 @@ public
     private
         String kdfName = null;
     private
-        String unitId = null;
-    private
         String mfgStp = null;
     private
         int unitLevelDocCnt = 0;
@@ -154,7 +152,6 @@ public
         this.fileOpenTime = null;
         this.transferTime = null;
         this.kdfName = null;
-        this.unitId = null;
         this.mfgStp = null;
         this.fileLevelDocCnt = 0;
         this.unitLevelDocCnt = 0;

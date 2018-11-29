@@ -24,10 +24,10 @@ public
 
     private
         KDFReader kdfReader = null;
+    private final
+        Reader smapReader = SmapReader.getInstance();
     private
-        Reader smapReader = null;
-    private
-        Reader watReader = null;
+        Reader watReader = WatReader.getInstance();
 
     private
         void init() {
@@ -42,12 +42,6 @@ public
                 || dataType.equals(Config.DataTypes.SLT)
                 || dataType.equals(Config.DataTypes.WaferSort))) {
                 kdfReader = new KDFReader();
-            }
-            if (smapReader == null && dataType.equals(Config.DataTypes.SMAP)) {
-                smapReader = new SmapReader(format);
-            }
-            if (watReader == null && dataType.equals(Config.DataTypes.WAT)) {
-                smapReader = new WatReader(format);
             }
         }
     }
@@ -141,8 +135,8 @@ public
                                 }
 
                                 smapReader.loadFile(kdfFile);
-                                if (smapReader.getKdfDoneCnt() >= smapReader.getFormat().getFileLimit()) {
-                                    System.out.println("kdf done file cnt is " + (smapReader.getKdfDoneCnt()));
+                                if (SmapReader.kdfDoneCnt >= Config.smapFormat.getFileLimit()) {
+                                    System.out.println("kdf done file cnt is " + (SmapReader.kdfDoneCnt));
                                     System.out.println("Have break now, bye");
                                     return;
                                 }
@@ -160,6 +154,54 @@ public
 
     }
 
+    private
+        void readWat() {
+        if (watReader != null) {
+            System.out.println("*****************************************************************");
+            System.out.println("**********                                     ******************");
+            System.out.println("**********        start to proceed wat         ******************");
+            System.out.println("**********                                     ******************");
+            System.out.println("*****************************************************************");
+            File rootFile = new File(Config.watFormat.getKdfPath());
+            for (File dateFile : rootFile.listFiles()) {
+                if (!this.checkDateFile(dateFile, Config.watFormat.getMinDateString())) {
+                    System.out.printf("Warning: skip %s since minDate is %s\n", dateFile.getName(), Config.watFormat.getMinDateString());
+                    continue;
+                }
+                for (File lotFile : dateFile.listFiles()) {
+                    if (lotFile.isDirectory()) {
+                        for (File kdfFile : lotFile.listFiles()) {
+                            if (kdfFile.isFile()) {
+                                String fileName = kdfFile.getName();
+                                if (!kdfFile.canRead()) {
+                                    System.out.println("Error: tdni has no permission to read this file");
+                                    continue;
+                                }
+                                if (kdfFile.length() < 100) {
+                                    System.out.printf("Error: file size = %d error, less than 100 byte\n", kdfFile.length());
+                                    continue;
+                                }
+
+                                watReader.loadFile(kdfFile);
+                                if (WatReader.kdfDoneCnt >= Config.watFormat.getFileLimit()) {
+                                    System.out.println("kdf done file cnt is " + (WatReader.kdfDoneCnt));
+                                    System.out.println("Have break now, bye");
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.println("*****************************************************************");
+            System.out.println("**********                                     ******************");
+            System.out.println("**********      complete to proceed wat        ******************");
+            System.out.println("**********                                     ******************");
+            System.out.println("*****************************************************************");
+        }
+
+    }
+
     public
         FileReader(File configFile) {
         long startTime = System.currentTimeMillis();
@@ -168,10 +210,11 @@ public
 
         System.out.println(LocalDateTime.now().toString() + ": Task start...");
         this.readSmap();
-        this.readKDF(Config.getSLTFormat());
+        this.readWat();
         for (DataFormat format : Config.dataFormats.values()) {
             if (format.getDataType().equals(Config.DataTypes.ATE)
-                || format.getDataType().equals(Config.DataTypes.WaferSort)) {
+                || format.getDataType().equals(Config.DataTypes.WaferSort)
+                || format.getDataType().equals(Config.DataTypes.SLT)) {
                 this.readKDF(format);
             }
         }

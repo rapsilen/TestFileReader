@@ -47,16 +47,26 @@ public
         int goodLotCnt = 0;
     private
         int badLotCnt = 0;
-    private
+    private final
         SimpleDateFormat fmtDateTime1 = new SimpleDateFormat("yyyyMMddHHmmss");
+    private static
+        CamstarReader instance = null;
 
-    public
+    private
         CamstarReader(DataFormat format) {
         super(format);
     }
 
+    public static
+        CamstarReader getInstance() {
+        if (instance == null && Config.camFormat != null && Config.camFormat.isEnabled()) {
+            instance = new CamstarReader(Config.camFormat);
+        }
+        return instance;
+    }
+
     @Override
-    public
+    protected
         void init() {
         this.workbook = null;
         this.sheet = null;
@@ -69,7 +79,7 @@ public
     }
 
     @Override
-    public
+    protected
         boolean readFile() {
         try {
             this.workbook = WorkbookFactory.create(this.getFile());
@@ -180,8 +190,10 @@ public
 
             this.goodLotCnt++;
             String docIdKVString = "," + FieldType.Lot_Doc_id + "=" + this.getCamDocId(camLot, camOper);
-            this.camDocs.append(this.generateLotHeadKVStr()).append(docIdKVString).append(camDateKVString).append(camMonthKVString).append("\n");
-
+            String docValue = this.generateLotHeadKVStr() + docIdKVString + camDateKVString + camMonthKVString + "\n";
+            if (Reader.validateFullForamtString(docValue)) {
+                this.camDocs.append(docValue);
+            }
         }
         return true;
     }
@@ -226,7 +238,7 @@ public
     }
 
     @Override
-    public
+    protected
         void logRepeatFileToES() {
         System.out.printf("%s=%s,%s=%s,%s=%s,%s=%s,%s=%s,%s=%s,%s=%s\n",
             FieldType.EventType, Config.EventType.KDFRepeat,
@@ -240,7 +252,7 @@ public
     }
 
     @Override
-    public
+    protected
         void logOpenFailureToES() {
         System.out.printf("%s=%s,%s=%s,%s=%s,%s=%s,%s=%s,%s=%s,%s=%s\n",
             FieldType.EventType, Config.EventType.KDFOpenFailure,
@@ -254,7 +266,7 @@ public
     }
 
     @Override
-    public
+    protected
         void logIoErrorToES(String error) {
         System.out.printf("%s=%s,%s=%s,%s=%s,%s=%s,%s=%s,%s=%s,%s=%s,%s=%s\n",
             FieldType.EventType, Config.EventType.IOError,
@@ -269,7 +281,7 @@ public
     }
 
     @Override
-    public
+    protected
         void logExceptionToES() {
         System.out.printf("%s=%s,%s=%s,%s=%s,%s=%s,%s=%s,%s=%s,%s=%s\n",
             FieldType.EventType, Config.EventType.KDFException,
@@ -283,7 +295,7 @@ public
     }
 
     @Override
-    public
+    protected
         void logFileDoneToES() {
         System.out.printf("%s=%s,%s=%s,%s=%s,%s=%d,%s=%d,%s=%s,%s=%s,%s=%s,%s=%s,%s=%s\n",
             FieldType.EventType, Config.EventType.KDFDone,
@@ -311,7 +323,6 @@ public
         void test() {
         long startTime = System.currentTimeMillis();
         new Config("config/dataformat.xml");
-        Reader reader = new CamstarReader(Config.camFormat);
         Config.camFormat.setProductionMode(false);
 
         File testDataFile = new File(Config.camFormat.getKdfPath());
@@ -320,7 +331,7 @@ public
         for (File shiftFile : testDataFile.listFiles()) {
             for (File dateFile : shiftFile.listFiles()) {
                 for (File xlsFile : dateFile.listFiles()) {
-                    reader.loadFile(xlsFile);
+                    CamstarReader.getInstance().loadFile(xlsFile);
                 }
             }
         }

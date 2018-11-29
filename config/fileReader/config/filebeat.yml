@@ -163,14 +163,14 @@ filebeat.inputs:
   clean_removed: false
   ignore_older: 2h
   clean_inactive: 3h
-  harvester_limit: 5
+  harvester_limit: 1
   
   pipeline: smap-test
   
 - type: log
 
   # Change to true to enable this input configuration.
-  enabled: false
+  enabled: true
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
@@ -180,10 +180,12 @@ filebeat.inputs:
   # Exclude files. A list of regular expressions to match. Filebeat drops the files that
   # are matching any regular expression from the list. By default, no files are dropped.
   #exclude_files: ['.gz$']
-  scan_frequency: 5
+  scan_frequency: 300
   close_eof: true
-  clean_removed: true
-  harvester_limit: 3
+  clean_removed: false
+  ignore_older: 2h
+  clean_inactive: 3h
+  harvester_limit: 1
   
   pipeline: wat-test  
 
@@ -200,10 +202,12 @@ filebeat.inputs:
   # Exclude files. A list of regular expressions to match. Filebeat drops the files that
   # are matching any regular expression from the list. By default, no files are dropped.
   #exclude_files: ['.gz$']
-  scan_frequency: 5
+  scan_frequency: 300
   close_eof: true
-  clean_removed: true
-  harvester_limit: 3
+  clean_removed: false
+  ignore_older: 2h
+  clean_inactive: 3h
+  harvester_limit: 1
   
   pipeline: Camstart-report
   

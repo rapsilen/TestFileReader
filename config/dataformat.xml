@@ -351,7 +351,7 @@ and open the template in the editor.
             <End></End>
         </KDFDate>
         <LatestDays></LatestDays>
-        <FileLimit>100</FileLimit>
+        <FileLimit>1000</FileLimit>
         
         <Customer>Hygon</Customer>
         <Factory>GFDRS</Factory>
@@ -369,7 +369,7 @@ and open the template in the editor.
         <!--comma separated filters, case sensitive-->
         <FilterOut></FilterOut><!--filter out kdf whose name contains sbo-->
         <!--comma separated selectors, case sensitive-->
-        <Selector>limit</Selector> <!--select kdf whose name contains GFDRS-->
+        <Selector>data.dis</Selector> <!--select kdf whose name contains GFDRS-->
         
         
         <!--list length while kdf name is split by underline-->
@@ -381,15 +381,11 @@ and open the template in the editor.
         <WaferNumberIndex>3</WaferNumberIndex>
         <SiteIndex></SiteIndex>
         <KDFMonthIndex>8</KDFMonthIndex>
-        <SourceTypeIndex>0</SourceTypeIndex>
         <!--comma separated file open time indices -->
         <FileOpenTimeIndex>8,9</FileOpenTimeIndex>
         
         <!--if enabled, the file name will be added in the unit level doc, default 0-->
         <AddFileNameInUnit>1</AddFileNameInUnit>
-        
-        
-        <LogFailOnlyNodeSelector></LogFailOnlyNodeSelector>
         
     </SourceType>
     <SourceType name= "SMAP" enabled = "1" >
@@ -401,7 +397,7 @@ and open the template in the editor.
         <!--LogToFile means save the kdf raw data in the log file, default 1-->
         <LogToFile>1</LogToFile>
         <!--this flag is to generate the mapping file to skip the repeat kdf file, default 1-->
-        <GenerateMappingFile>1</GenerateMappingFile>
+        <GenerateMappingFile>0</GenerateMappingFile>
         <KDFDate>
             <Start></Start>
             <End></End>
@@ -452,7 +448,7 @@ and open the template in the editor.
         <!--LogToFile means save the kdf raw data in the log file, default 1-->
         <LogToFile>1</LogToFile>
         <!--this flag is to generate the mapping file to skip the repeat kdf file, default 1-->
-        <GenerateMappingFile>1</GenerateMappingFile>
+        <GenerateMappingFile>0</GenerateMappingFile>
         <!--if this a lot file, the mapping path is date/lot/file, else is just use date/file-->
         <IsLotFile>0</IsLotFile>
         
@@ -1212,8 +1208,9 @@ and open the template in the editor.
             <SourceType name= "SLT" enabled = "0" >
                 <EnabledLog>1</EnabledLog>
             </SourceType>
-            <SourceType name= "WAT" enabled = "0" >
+            <SourceType name= "WAT" enabled = "1" >
                 <EnabledLog>1</EnabledLog>
+                <Index>4</Index>
             </SourceType>
             <SourceType name= "SMAP" enabled = "1" >
                 <EnabledLog>1</EnabledLog>
@@ -1280,6 +1277,7 @@ and open the template in the editor.
                 <Type>String</Type>
                 <AllowEmpty>N</AllowEmpty>
             </SourceType>
+            <IswaferNumber>1</IswaferNumber>
         </XmlNode>
         
         

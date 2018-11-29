@@ -5,50 +5,54 @@
  */
 package org.himalayas.filereader.reader.wat;
 
+import org.himalayas.filereader.util.FieldType;
+
 /**
  *
  * @author wsilen
  */
-public class ParameterDesc {
+public
+    class ParameterDesc {
 
-    private int paramId = 0;
-    private String paramName = null;
-    private String group = null;
-    private String LSL = null;
-    private String USL = null;
-    private String unit = null;
+    private
+        int paramId = 0;
+    private
+        String paramName = null;
+    private
+        String group = null;
+    private
+        String loLimit = null;
+    private
+        String hiLimit = null;
+    private
+        String unit = null;
 
-    public ParameterDesc(int paramId, String paramName, String group, String LSL, String USL, String unit) {
+    /**
+     *
+     * @param paramId
+     * @param paramName
+     * @param group
+     * @param LSL
+     * @param USL
+     * @param unit
+     */
+    public
+        ParameterDesc(int paramId, String paramName, String group, String LSL, String USL, String unit) {
         this.paramId = paramId;
         this.paramName = paramName;
         this.group = group;
-        this.LSL = LSL;
-        this.USL = USL;
+        this.loLimit = LSL;
+        this.hiLimit = USL;
         this.unit = unit;
     }
 
-    public int getParamId() {
-        return paramId;
-    }
-
-    public String getParamName() {
-        return paramName;
-    }
-
-    public String getGroup() {
-        return group;
-    }
-
-    public String getLSL() {
-        return LSL;
-    }
-
-    public String getUSL() {
-        return USL;
-    }
-
-    public String getUnit() {
-        return unit;
+    public
+        String getDocValue() {
+        return "," + FieldType.TestName + "=" + this.paramName
+            + "," + FieldType.Group + "=" + this.group
+            + "," + FieldType.LoLimit + "=" + this.loLimit
+            + "," + FieldType.HiLimit + "=" + this.hiLimit
+            + "," + FieldType.Units + "=" + this.unit;
     }
 
 }

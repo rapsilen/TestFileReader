@@ -187,6 +187,8 @@ public
         XmlNode operationNode = null;
     private
         XmlNode camDateNode = null;
+    private
+        XmlNode waferNumebrNode = null;
 
     public
         DataFormat(Element sourceData) {
@@ -563,7 +565,15 @@ public
             if (this.getLotNumberIndex() == -1) {
                 System.out.println("LotNumberIndex can not be null");
                 return false;
+            }
+            if (this.getLotNumberNode() == null) {
+                System.out.println("LotNumber Node can not be null");
+                return false;
+            }
 
+            if (this.getWaferNumebrNode() == null) {
+                System.out.println("WaferNumber Node can not be null");
+                return false;
             }
             if (this.getDataType() == null) {
                 System.out.println("DateType can not be null");
@@ -619,11 +629,23 @@ public
                 return false;
             }
             for (XmlNode xmlNode : this.lotHead.values()) {
-                if (xmlNode.isEnabled() && xmlNode.isEnabledLog() && (xmlNode.getIndex() == -1 || xmlNode.getIndex() >= this.getUnderLineCnt())) {
-//                    System.out.printf("please setup a correct index for head node %s in %s\n", xmlNode.getName(), this.getSourceType());
-//                    return false;
+                if (this.getDataType().equals(Config.DataTypes.SMAP)) {
+                    if (xmlNode.isEnabled() && xmlNode.isEnabledLog() && (xmlNode.getIndex() == -1 || xmlNode.getIndex() >= this.getUnderLineCnt())) {
+                        System.out.printf("please setup a correct index for head node %s in %s\n", xmlNode.getName(), this.getSourceType());
+                        return false;
+                    }
                 }
+                else {
+                    if (xmlNode.isEnabled() && xmlNode.isEnabledLog()) {
+                        if (xmlNode.getCamColumnName() == null
+                            && ((xmlNode.getIndex() == -1)
+                            || (xmlNode.getIndex() >= this.getUnderLineCnt()))) {
+                            System.out.printf("please setup a correct index or name for head node %s in %s\n", xmlNode.getName(), this.getSourceType());
+                            return false;
+                        }
 
+                    }
+                }
             }
 
             return checkArchive();
@@ -1599,6 +1621,16 @@ public
     public
         void setCamDateNode(XmlNode camDateNode) {
         this.camDateNode = camDateNode;
+    }
+
+    public
+        XmlNode getWaferNumebrNode() {
+        return waferNumebrNode;
+    }
+
+    public
+        void setWaferNumebrNode(XmlNode waferNumebrNode) {
+        this.waferNumebrNode = waferNumebrNode;
     }
 
 }
